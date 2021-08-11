@@ -1,5 +1,6 @@
 package com.disabella.takephoto
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -38,15 +39,18 @@ class Tab1Fragment : Fragment() {
         return inflater.inflate(R.layout.fragment_tab1, container, false)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val gson = GsonBuilder().create()
-        val data = gson.fromJson(dataRecycler, MyItemMain::class.java)
+        val sharedPref = activity?.getSharedPreferences("main", Context.MODE_PRIVATE)
+        val description = sharedPref?.getString("description", "Your description")
+        val path = sharedPref?.getString("path", "Your path")
 
-        val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerView)
+        MyItem(path, description)
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView?.layoutManager = LinearLayoutManager(App.appContext)
-        recyclerView?.adapter = RecyclerAdapter(data.myItem ?: emptyList())
+        recyclerView?.adapter = RecyclerAdapter(dataRecycler ?: emptyList())
 
     }
 

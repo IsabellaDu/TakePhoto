@@ -26,6 +26,8 @@ class RecyclerAdapter(private val items: List<MyItem>) :
         }
     }
 
+
+
     override fun getItemCount(): Int = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -37,7 +39,10 @@ class RecyclerAdapter(private val items: List<MyItem>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         items[position].apply {
             viewHolder.title.text = description
-            /*viewHolder.icon.setBackgroundColor(randomColor())*/
+            /*Glide.with(Tab1Fragment)
+                .load(path)
+                .placeholder(R.drawable.ic_baseline_image_24)
+                .into(viewHolder.icon)*/
         }
     }
 }

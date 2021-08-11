@@ -2,6 +2,7 @@ package com.disabella.takephoto
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
@@ -11,9 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.media.MediaBrowserServiceCompat.RESULT_OK
@@ -43,13 +42,13 @@ class Tab2Fragment : Fragment() {
 
     private val resultLauncher = registerForActivityResult(contract) {
         if (it.resultCode == Activity.RESULT_OK) {
-            description.text = "$currentPhotoPath"
             Glide.with(this).load(currentPhotoPath).into(imageView)
         }
     }
 
 
-    lateinit var description: TextView
+    /*lateinit var description: EditText*/
+    lateinit var savePhoto: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,19 +66,45 @@ class Tab2Fragment : Fragment() {
         return inflater.inflate(R.layout.fragment_tab2, container, false)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        imageView = view?.findViewById(R.id.imageView)!!
-        description = view?.findViewById(R.id.description)!!
+        imageView = view.findViewById(R.id.imageView)
+        val description = view.findViewById<EditText>(R.id.description)
+        savePhoto = view.findViewById(R.id.savePhoto)
+
+        val sharedPref = activity?.getSharedPreferences("main", Context.MODE_PRIVATE)
 
         Glide.with(this)
             .load(URL)
             .placeholder(R.drawable.ic_baseline_image_24)
             .into(imageView)
 
-        view?.findViewById<Button>(R.id.takePhoto)?.setOnClickListener {
+        view.findViewById<Button>(R.id.takePhoto)?.setOnClickListener {
             takePicture()
+        }
+
+        savePhoto.setOnClickListener {
+
+            when {
+                description.text.isEmpty() -> {
+                    Toast.makeText(activity, "You have to write description", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                currentPhotoPath == null -> {
+                    Toast.makeText(activity, "Firstly you have to take photo", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                !(description.text.isEmpty()) && currentPhotoPath != null -> {
+                    sharedPref?.edit()?.putString("description", description.text.toString())
+                        ?.apply()
+                    sharedPref?.edit()?.putString("path", currentPhotoPath.toString())
+                        ?.apply()
+
+                    Toast.makeText(activity, "Great work", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
         }
 
     }
