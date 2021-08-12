@@ -4,15 +4,13 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-@Suppress("DEPRECATION")
-class RecyclerAdapter(private val items: List<MyItem>) :
+class RecyclerAdapter(val items: MutableList<MyItem>) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -26,8 +24,6 @@ class RecyclerAdapter(private val items: List<MyItem>) :
         }
     }
 
-
-
     override fun getItemCount(): Int = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,10 +35,10 @@ class RecyclerAdapter(private val items: List<MyItem>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         items[position].apply {
             viewHolder.title.text = description
-            /*Glide.with(Tab1Fragment)
+            Glide.with(viewHolder.icon.context)
                 .load(path)
                 .placeholder(R.drawable.ic_baseline_image_24)
-                .into(viewHolder.icon)*/
+                .into(viewHolder.icon)
         }
     }
 }
