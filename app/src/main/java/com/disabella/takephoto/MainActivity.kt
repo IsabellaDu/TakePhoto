@@ -56,25 +56,8 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
-
-        /*button.setOnClickListener {
-
-            val randomName = UUID.randomUUID().toString()
-            textView.text = randomName
-
-            Glide.with(this)
-                .load(urls[num])
-                .placeholder(R.drawable.ic_baseline_image_24)
-                .into(imageView)
-        }*/
-
-
     }
-
-
 }
-
 
 class ViewPagerAdapter(activity: MainActivity) : FragmentStateAdapter(activity) {
     override fun getItemCount() = 2
