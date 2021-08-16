@@ -13,6 +13,7 @@ import com.google.gson.GsonBuilder
 class Tab1Fragment : Fragment() {
 
     private lateinit var adapter: RecyclerAdapter
+    lateinit var storage: Storage
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,11 +26,13 @@ class Tab1Fragment : Fragment() {
 
         adapter = RecyclerAdapter(ArrayList())
         recyclerView.adapter = adapter
+
+        storage = DataStorage
     }
 
     override fun onResume() {
         super.onResume()
-        val items = DataStorage.loadItems()
+        val items = storage.loadItems()
         adapter.items.clear()
         adapter.items.addAll(items)
         adapter.notifyDataSetChanged()
